@@ -1,4 +1,7 @@
-import { Funko } from "./funkoClass.js"
+// importo clases
+import { Funko } from "./funkoClass.js";
+// importo funciones
+import { validarNumeros, validarTexto, validarGeneral, limpiarForm } from "./validaciones.js";
 
 // arreglo global para guardar los objetos
 let listaFunkopop = [];
