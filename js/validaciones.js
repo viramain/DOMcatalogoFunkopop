@@ -1,6 +1,5 @@
 //--- validar campos numericos
-export function validarNumeros(numeros) {
-    console.log("en funcion validarNumeros()")
+function validarNumeros(numeros) {
     if (numeros.value.trim() != "" && !isNaN(numeros.value)) {
         numeros.className = "form-control is-valid";
         return true;
@@ -10,9 +9,8 @@ export function validarNumeros(numeros) {
     }
 }
 
-export function validarTexto(texto) {
-    console.log("en funcion validar texto")
-    if (texto.value.trim() != "" && texto.value.length >= 10) {
+function validarTexto(texto) {
+    if (texto.value.trim() != "") {
         texto.className = "form-control is-valid";
         return true;
     } else {
@@ -21,30 +19,25 @@ export function validarTexto(texto) {
     }
 }
 
+
 // la palabra event puede ser cualquiera
-export function validarGeneral(event) {
+function validarGeneral(event) {
+    console.log("en validar general. cuando presiona boton guardar");
     event.preventDefault();
-    if (validarNumeros(document.getElementById("codigo")) &&
+    if (
+        validarNumeros(document.getElementById("codigo")) &&
         validarTexto(document.getElementById("nombre")) &&
         validarTexto(document.getElementById("numSerie")) &&
         validarTexto(document.getElementById("categoria")) &&
-        validarTexto(document.getElementById("descripcion"))) {
-        alert("guarda datos")
-            // debo guardar los datos en el array?????
-            // limpiarForm();
+        validarTexto(document.getElementById("descripcion"))
+    ) {
+        // alert("Datos Correctos")
     } else {
-        // debo mostrar error y no mandar mail
-        alert("Datos Incorrectos");
+        // mostrar alert de sweet alert con mensaje al usuario
+        Swal.fire(
+            "Error",
+            "El FunkopPop No pudo agregarse.",
+            "error"
+        );
     }
-}
-
-export function limpiarForm() {
-    document.getElementById("formFunkopop").reset();
-    document.getElementById("codigo").className = "form-control";
-    document.getElementById("nombre").className = "form-control";
-    document.getElementById("numserie").className = "form-control";
-    document.getElementById("categoria").className = "form-control";
-    document.getElementById("descripcion").className = "form-control";
-    // cierra la ventana alert si no la cerró manualmente el usuario
-    // setTimeout(function() { document.getElementById("mensaje").innerHTML = `<div></div>`; }, 5000);
 }
