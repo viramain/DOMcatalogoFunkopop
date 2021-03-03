@@ -19,7 +19,6 @@ function validarTexto(texto) {
     }
 }
 
-
 // la palabra event puede ser cualquiera
 function validarGeneral(event) {
     console.log("en validar general. cuando presiona boton guardar");

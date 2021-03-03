@@ -1,8 +1,7 @@
 // ----- importo clases
 import { Funko } from "./funkoClass.js";
-// ----- importo funciones
+// ----- importo funciones??????
 // import { validarGeneral } from "./validaciones.js";
-
 
 // CREA arreglo global para guardar los objetos
 let listaFunkopop = [];
@@ -27,7 +26,7 @@ leerDatos();
 // para que la funcion sea accedible desde el html con la llamada desde el form onsubmit="agregarFunkopop(event)
 //se agrega WINDOW sino, usar addeventlistener desde js
 window.agregarFunkopop = function(event) {
-    // validar general antes de almacenar en localstorage
+    // validar general antes de almacenar en localstorage???????????????????????????
     validarGeneral(event);
 
     // el objetivo de la funcion es agreegar un funkopop nuevo en localStorsge
@@ -53,7 +52,7 @@ window.agregarFunkopop = function(event) {
     listaFunkopop.push(nuevoFunkopop);
     console.log(listaFunkopop);
 
-    //guardar datos en LOCAL STORAGE en formato json
+    //guardar datos en LOCAL STORAGE en formato json usando JSON.stringify (formato texto)
     localStorage.setItem("listaFunkoKey", JSON.stringify(listaFunkopop));
 
     //limpiar el formulario
@@ -65,13 +64,12 @@ window.agregarFunkopop = function(event) {
         "El FunkopPop se agregó correctamente",
         "success"
     );
-
+    // llamar a leer datos
+    leerDatos();
     // cerrar la ventana modal usando bootstrap
     modalFunko.hide();
 };
 //-------------- fin seccion WINDOW -----------------------------
-
-
 
 
 function limpiarFormulario() {
@@ -88,10 +86,46 @@ function limpiarFormulario() {
 
 // si hay datos almacenados, no sobreescribe, sino que agrega al final
 function leerDatos() {
-    console.log("en leer datos");
     if (localStorage.length > 0) {
-        // traer datos del localstorage
+        // traer datos del localstorage con formato de objeto usando JSON.parse
         let _listaFunkopop = JSON.parse(localStorage.getItem("listaFunkoKey"));
         console.log(_listaFunkopop);
+        // si el arreglo de listafunkopop esra vacio le cargo los productos del localstarage
+        if (listaFunkopop.length === 0) {
+            listaFunkopop = _listaFunkopop;
+        }
+        //dibujar tabla
+        dibujarTabla(_listaFunkopop);
     }
+}
+
+function dibujarTabla(_listaFunkopop) {
+    // traer el padre de las filas TBODY
+    let tablaFunko = document.getElementById("tablaFunko");
+    // variable donde voy a crear la fila TR
+    let filaFunko = "";
+    //limpiar los datos del tbody
+    tablaFunko.innerHTML = "";
+
+    // for (let i = 0; i < _listaFunkopop.length; i++) {}
+
+    // FOR IN trabaja en todas las posiciones del arreglo, 1 por 1, sin saltar nada
+    for (let i in _listaFunkopop) {
+        // crear la fila
+        filaFunko = `<tr>
+        <th scope="row">${_listaFunkopop[i].codigo}</th>
+        <td>${_listaFunkopop[i].nombre}</td>
+        <td>${_listaFunkopop[i].numSerie}</td>
+        <td>${_listaFunkopop[i].categoria}</td>
+        <td>${_listaFunkopop[i].descripcion}</td>
+        <td>${_listaFunkopop[i].imagen}</td>
+        <td>
+            <button class="btn btn-warning">Editar</button>
+            <button class="btn btn-danger">Eliminar</button>
+        </td>
+    </tr>`;
+        //agregar la fila al elemento padre
+        tablaFunko.innerHTML += filaFunko;
+    }
+
 }
