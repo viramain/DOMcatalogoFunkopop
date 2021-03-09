@@ -1,42 +1,86 @@
-//--- validar campos numericos
-function validarNumeros(numeros) {
-    if (numeros.value.trim() != "" && !isNaN(numeros.value)) {
-        numeros.className = "form-control is-valid";
+// USANDO ONBLUR DESDE HTML
+
+// function validarNumeros(numeros) {
+//     if (numeros.value.trim() != "" && !isNaN(numeros.value)) {
+//         numeros.className = "form-control is-valid";
+//         return true;
+//     } else {
+//         numeros.className = "form-control is-invalid";
+//         return false;
+//     }
+// }
+
+// function validarTexto(texto) {
+//     if (texto.value.trim() != "") {
+//         texto.className = "form-control is-valid";
+//         return true;
+//     } else {
+//         texto.className = "form-control is-invalid";
+//         return false;
+//     }
+// }
+//----------------FIN VALIDACION DESDE HTML----------------------
+
+// OTRA FORMA DE VALIDAR DESDE JS: Agregar eventos desde JS
+// como uso la funcion validarTexto para todos los campos texto?????????
+let inputTexto = document.getElementById("nombre");
+inputTexto.addEventListener("blur", validarTexto);
+export function validarTexto() {
+    if (inputTexto.value.trim() != "") {
+        inputTexto.className = "form-control is-valid";
         return true;
     } else {
-        numeros.className = "form-control is-invalid";
+        inputTexto.className = "form-control is-invalid";
         return false;
     }
 }
 
-function validarTexto(texto) {
-    if (texto.value.trim() != "") {
-        texto.className = "form-control is-valid";
+let inputNroSerie = document.getElementById("numSerie");
+inputNroSerie.addEventListener("blur", validarSerie);
+export function validarSerie() {
+    if (inputNroSerie.value.trim() != "") {
+        inputNroSerie.className = "form-control is-valid";
         return true;
     } else {
-        texto.className = "form-control is-invalid";
+        inputNroSerie.className = "form-control is-invalid";
         return false;
     }
 }
 
-// la palabra event puede ser cualquiera
-function validarGeneral(event) {
-    console.log("en validar general. cuando presiona boton guardar");
-    event.preventDefault();
-    if (
-        validarNumeros(document.getElementById("codigo")) &&
-        validarTexto(document.getElementById("nombre")) &&
-        validarTexto(document.getElementById("numSerie")) &&
-        validarTexto(document.getElementById("categoria")) &&
-        validarTexto(document.getElementById("descripcion"))
-    ) {
-        // alert("Datos Correctos")
+let inputCategoria = document.getElementById("categoria");
+inputCategoria.addEventListener("blur", validarCategoria);
+export function validarCategoria() {
+    if (inputCategoria.value.trim() != "") {
+        inputCategoria.className = "form-control is-valid";
+        return true;
     } else {
-        // mostrar alert de sweet alert con mensaje al usuario
-        Swal.fire(
-            "Error",
-            "El FunkopPop No pudo agregarse.",
-            "error"
-        );
+        inputCategoria.className = "form-control is-invalid";
+        return false;
+    }
+}
+
+let inputDescrip = document.getElementById("descripcion");
+inputDescrip.addEventListener("blur", validarDescripcion);
+export function validarDescripcion() {
+    if (inputDescrip.value.trim() != "") {
+        inputDescrip.className = "form-control is-valid";
+        return true;
+    } else {
+        inputDescrip.className = "form-control is-invalid";
+        return false;
+    }
+}
+//========================================================================0
+
+// Valida numeros desde JS
+let inputNum = document.getElementById("codigo");
+inputNum.addEventListener("blur", validarNumeros);
+export function validarNumeros() {
+    if (inputNum.value.trim() != "" && !isNaN(inputNum.value)) {
+        inputNum.className = "form-control is-valid";
+        return true;
+    } else {
+        inputNum.className = "form-control is-invalid";
+        return false;
     }
 }
