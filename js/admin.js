@@ -1,8 +1,6 @@
-// ----- importo clases
+// ----- importo clases y funciones
 import { Funko } from "./funkoClass.js";
-// ----- importo funciones
-// import { validarTexto, validarNumeros, validarSerie, validarDescripcion, validarCategoria } from "./validaciones.js";
-import { validarTexto, validarNumeros } from "./validaciones.js";
+import { validarTexto, validarNumeros, validarSerie, validarDescripcion, validarCategoria } from "./validaciones.js";
 
 // CREA arreglo global para guardar los objetos
 let listaFunkopop = [];
@@ -17,32 +15,27 @@ const modalFunko = new bootstrap.Modal(
 // FALSE= agregar, TRUE= modificar
 let modificarFunko = false;
 
-//function agregarFunko(event){}
-
-// queremos que el boton agregar escuche el evento click y muestre la ventana modal
+// FUNCION ANONIMA: queremos que el boton agregar escuche el evento click y muestre la ventana modal
 let btnAgregar = document.getElementById("btnAgregar");
 btnAgregar.addEventListener("click", () => {
     // mostrar ventana modal
+    limpiarFormulario();
     modalFunko.show();
+    // document.getElementById("tituloModal").innerHTML = `<h5 class="modal-title" id="tituloModal">Agregar Producto</h5>`
 });
-//-------------------------------------------------------
 
 // buscar los datos del localstorage
 leerDatos();
 
-// para que la funcion sea accedible desde el html con la llamada desde el form onsubmit="agregarFunkopop(event)
-//se agrega WINDOW sino, usar addeventlistener desde js
-window.agregarFunkopop = function(event) {
+function agregarFunkopop() {
     // el objetivo de la funcion es agreegar un funkopop nuevo en localStorsge
-    event.preventDefault();
-
     // ------------- validar general ------------------
     if (
         validarNumeros(document.getElementById("codigo")) &&
         validarTexto(document.getElementById("nombre")) &&
-        validarTexto(document.getElementById("numSerie")) &&
-        validarTexto(document.getElementById("categoria")) &&
-        validarTexto(document.getElementById("descripcion"))
+        validarSerie(document.getElementById("numSerie")) &&
+        validarCategoria(document.getElementById("categoria")) &&
+        validarDescripcion(document.getElementById("descripcion"))
     ) { // SI TODOS LOS DATOS ESTA BIEN INGRESADOS:
         // traer los valores del formulario ya validados (despues de validar general)
         let codigo = document.getElementById("codigo").value.trim();
@@ -92,13 +85,12 @@ window.agregarFunkopop = function(event) {
     }
     //-------- FIN VALIDACION GENERAL ---------------------
 };
-//-------------- fin seccion WINDOW -----------------------------
-
 
 function limpiarFormulario() {
     // estamos reseteando los valores del formulario
     let formulario = document.getElementById("formFunkopop");
     formulario.reset();
+    modificarFunko = false;
 
     document.getElementById("codigo").className = "form-control";
     document.getElementById("nombre").className = "form-control";
@@ -152,8 +144,8 @@ function dibujarTabla(_listaFunkopop) {
     }
 }
 
+// para que la funcion sea accedible desde el html se agrega WINDOW sino, usar addeventlistener desde js
 // WINDOW es una funcion que se pueda ver desde JS cuando uso module
-
 window.eliminarFunkopop = function(boton) {
     console.log(boton.id);
     Swal.fire({
@@ -219,6 +211,57 @@ window.preparDatosFunko = function(boton) {
     document.getElementById('descripcion').value = funkoEncontrado.descripcion;
     document.getElementById('imagen').value = funkoEncontrado.imagen;
 
+    // quiero modificar funko
+    modificarFunko = true;
     // mostrar el formulario con los datos seleccionados en la ventana modal
     modalFunko.show();
+}
+
+// event del onsubmit del form
+window.guardarDatos = function(event) {
+    event.preventDefault();
+    console.log("desde la funcion guardarDatos");
+    // if modificarFunko===true
+    if (modificarFunko) {
+        // modificar funkopop existente
+        modificarFunkoExistente();
+    } else {
+        // agregar nuevo funkopop
+        agregarFunkopop();
+    }
+}
+
+//actualiza datos de un funko existente
+function modificarFunkoExistente() {
+    // busco el objeto a editar. Traigo los valores del formulario y los pongi en variables
+    let codigo = document.getElementById("codigo").value;
+    let nombre = document.getElementById("nombre").value;
+    let numSerie = document.getElementById("numSerie").value;
+    let categoria = document.getElementById("categoria").value;
+    let descripcion = document.getElementById("descripcion").value;
+    let imagen = document.getElementById("imagen").value;
+
+    for (let i in listaFunkopop) {
+        if (listaFunkopop[i].codigo === codigo) {
+            // modificar los datos
+            listaFunkopop[i].nombre = nombre;
+            // es igual a poner listaFunkopop[i].nombre = document.getElementById("nombre").value;
+            listaFunkopop[i].numSerie = numSerie;
+            listaFunkopop[i].categoria = categoria;
+            listaFunkopop[i].descripcion = descripcion;
+            listaFunkopop[i].imagen = imagen;
+        }
+    }
+    // guardar arreglo actualizado en localstorage
+    localStorage.setItem("listaFunkoKey", JSON.stringify(listaFunkopop));
+    //mostrar alerta de modificacion realizada
+    Swal.fire(
+        "Producto Modificado",
+        "El FunkopPop se actualizó correctamente",
+        "success"
+    );
+    //cerrar ventana modal
+    modalFunko.hide();
+    // volver a dibujar la tabla
+    leerDatos();
 }

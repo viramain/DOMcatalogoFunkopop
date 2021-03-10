@@ -22,9 +22,29 @@
 //----------------FIN VALIDACION DESDE HTML----------------------
 
 // OTRA FORMA DE VALIDAR DESDE JS: Agregar eventos desde JS
+
+// Valida numeros desde JS
+let inputNum = document.getElementById("codigo");
+inputNum.addEventListener("blur", validarNumeros);
+export function validarNumeros() {
+    if (inputNum.value.trim() != "" && !isNaN(inputNum.value)) {
+        // buscar si existe codigo ??????
+        inputNum.className = "form-control is-valid";
+        return true;
+    } else {
+        inputNum.className = "form-control is-invalid";
+        return false;
+    }
+}
+
 // como uso la funcion validarTexto para todos los campos texto?????????
+// let inputNombre = document.getElementById("nombre");
+// inputNombre.addEventListener("blur", function(){validarTexto(inputNombre)});
 let inputTexto = document.getElementById("nombre");
 inputTexto.addEventListener("blur", validarTexto);
+
+
+// export function validarTexto(inputTexto) {
 export function validarTexto() {
     if (inputTexto.value.trim() != "") {
         inputTexto.className = "form-control is-valid";
@@ -34,9 +54,11 @@ export function validarTexto() {
         return false;
     }
 }
+//---------------------------------------------------------------------------------
 
 let inputNroSerie = document.getElementById("numSerie");
 inputNroSerie.addEventListener("blur", validarSerie);
+
 export function validarSerie() {
     if (inputNroSerie.value.trim() != "") {
         inputNroSerie.className = "form-control is-valid";
@@ -71,16 +93,3 @@ export function validarDescripcion() {
     }
 }
 //========================================================================0
-
-// Valida numeros desde JS
-let inputNum = document.getElementById("codigo");
-inputNum.addEventListener("blur", validarNumeros);
-export function validarNumeros() {
-    if (inputNum.value.trim() != "" && !isNaN(inputNum.value)) {
-        inputNum.className = "form-control is-valid";
-        return true;
-    } else {
-        inputNum.className = "form-control is-invalid";
-        return false;
-    }
-}
